@@ -36,9 +36,15 @@ BasilsTools/
 │  ├─ DynamicArray.h
 │  ├─ DynamicArray2D.h
 │  ├─ DynamicArray3D.h
-│  └─ Tile.h
+│  ├─BGrid.h
+│  └─ BTile.h
 │
 ├─ src/
+│  ├─ DynamicArray.c
+│  ├─ DynamicArray2D.c
+│  ├─ DynamicArray3D.c
+│  ├─ BGrid.c
+│  └─ BTile.c
 ├─ tests/
 ├─ CMakeLists.txt
 └─ README.md
