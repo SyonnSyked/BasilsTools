@@ -1,4 +1,5 @@
 #include "include/DynamicArray.h"
+#include "include/DynamicArray2D.h"
 #include <stdio.h>
 
 typedef struct TestPlayer
@@ -19,6 +20,25 @@ static void PrintIntArray(DynArray* array)
 
     printf("\n\n");
 }
+
+
+
+static void PrintGrid(DynArray2D* grid)
+{
+    for (size_t y = 0; y < grid->height; y++)
+    {
+        for (size_t x = 0; x < grid->width; x++)
+        {
+            int* value = (int*)Array2D_Get(grid, x, y);
+            printf("%d ", *value);
+        }
+
+        printf("\n");
+    }
+
+    printf("\n");
+}
+
 
 int main(void)
 {
@@ -96,6 +116,44 @@ int main(void)
     }
 
     Array_Free(&players);
+
+    DynArray2D grid;
+
+    if (!Array2D_Init(&grid, 3, 3, sizeof(int)))
+    {
+        printf("Failed to initialize grid.\n");
+        return 1;
+    }
+
+    int fillValue = 1;
+    Array2D_Fill(&grid, &fillValue);
+
+    int center = 99;
+    Array2D_Set(&grid, 1, 1, &center);
+
+    printf("Original 3x3 grid:\n");
+    PrintGrid(&grid);
+
+    Array2D_Resize(&grid, 5, 4);
+
+    printf("Resized 5x4 grid:\n");
+    PrintGrid(&grid);
+
+    size_t index = 0;
+    if (Array2D_GetIndex(&grid, 2, 1, &index))
+    {
+        printf("Index of position (2, 1): %zu\n", index);
+    }
+
+    size_t x = 0;
+    size_t y = 0;
+
+    if (Array2D_GetPosition(&grid, index, &x, &y))
+    {
+        printf("Position of index %zu: (%zu, %zu)\n", index, x, y);
+    }
+
+    Array2D_Free(&grid);
 
     return 0;
 }
