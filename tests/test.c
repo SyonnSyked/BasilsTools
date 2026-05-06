@@ -1,6 +1,6 @@
-#include "include/DynamicArray.h"
-#include "include/DynamicArray2D.h"
-#include "include/DynamicArray3D.h"
+#include "../include/DynamicArray.h"
+#include "../include/DynamicArray2D.h"
+#include "../include/DynamicArray3D.h"
 #include <stdio.h>
 
 

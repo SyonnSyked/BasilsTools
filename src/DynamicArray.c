@@ -317,3 +317,18 @@ void Array_Clear(DynArray* array)
 
     array->count = 0;
 }
+
+void Array_Destroy(DynArray* array)
+{
+    if (array == NULL)
+    {
+        return;
+    }
+
+    free(array->data);
+
+    array->data = NULL;
+    array->elementSize = 0;
+    array->count = 0;
+    array->capacity = 0;
+}

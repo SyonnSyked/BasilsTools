@@ -35,4 +35,6 @@ bool Array2D_GetPosition(const DynArray2D* array, size_t index, size_t* outX, si
 
 size_t Array2D_Count(const DynArray2D* array);
 
+void Array2D_Destroy(DynArray2D* array);
+
 #endif

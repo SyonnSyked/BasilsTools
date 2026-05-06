@@ -37,6 +37,7 @@ bool Array_RemoveAt(DynArray* array, size_t index);
 bool Array_RemoveAtSwap(DynArray* array, size_t index);
 
 void Array_Clear(DynArray* array);
+void Array_Destroy(DynArray* array);
 
 
 #endif
