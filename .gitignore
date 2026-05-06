@@ -1,0 +1,20 @@
+# Build folders
+build/
+out/
+bin/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake-build-*/
+compile_commands.json
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Executables
+*.exe
+*.out
+*.obj
+*.o
