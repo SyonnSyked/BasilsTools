@@ -8,7 +8,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
 
-add_library(BasilsTools STATIC src/DynamicArray.c src/DynamicArray2D.c)
+add_library(BasilsTools STATIC src/DynamicArray.c src/DynamicArray2D.c src/DynamicArray3D.c)
 
 target_include_directories(BasilsTools PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 

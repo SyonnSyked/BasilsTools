@@ -1,6 +1,26 @@
 #include "include/DynamicArray.h"
 #include "include/DynamicArray2D.h"
+#include "include/DynamicArray3D.h"
 #include <stdio.h>
+
+
+static void PrintLayer(DynArray3D* array, size_t z)
+{
+    printf("Layer %zu:\n", z);
+
+    for (size_t y = 0; y < array->height; y++)
+    {
+        for (size_t x = 0; x < array->width; x++)
+        {
+            int* value = (int*)Array3D_Get(array, x, y, z);
+            printf("%d ", *value);
+        }
+
+        printf("\n");
+    }
+
+    printf("\n");
+}
 
 typedef struct TestPlayer
 {
@@ -154,6 +174,53 @@ int main(void)
     }
 
     Array2D_Free(&grid);
+
+    DynArray3D volume;
+
+    if (!Array3D_Init(&volume, 3, 3, 2, sizeof(int)))
+    {
+        printf("Failed to initialize 3D array.\n");
+        return 1;
+    }
+
+    int fillValue3D = 1;
+    Array3D_Fill(&volume, &fillValue3D);
+
+    int specialValue = 99;
+    Array3D_Set(&volume, 1, 1, 0, &specialValue);
+
+    int deeperValue = 77;
+    Array3D_Set(&volume, 2, 2, 1, &deeperValue);
+
+    printf("Original 3x3x2 volume:\n");
+    PrintLayer(&volume, 0);
+    PrintLayer(&volume, 1);
+
+    Array3D_Resize(&volume, 4, 4, 3);
+
+    printf("Resized 4x4x3 volume:\n");
+    PrintLayer(&volume, 0);
+    PrintLayer(&volume, 1);
+    PrintLayer(&volume, 2);
+
+    size_t index3D = 0;
+
+    if (Array3D_GetIndex(&volume, 2, 2, 1, &index))
+    {
+        printf("Index of position (2, 2, 1): %zu\n", index3D);
+    }
+
+    size_t x3D = 0;
+    size_t y3D = 0;
+    size_t z3D = 0;
+
+    if (Array3D_GetPosition(&volume, index3D, &x3D, &y3D, &z3D))
+    {
+        printf("Position of index %zu: (%zu, %zu, %zu)\n", index3D, x3D, y3D, z3D);
+    }
+
+    Array3D_Free(&volume);
+
 
     return 0;
 }
