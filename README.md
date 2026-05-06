@@ -13,19 +13,7 @@ cmake -S . -B build
 cmake --build build
 
 
-Absolutely. Since you want this to feel like a real reusable library, your README should explain:
 
-* what the library is
-* how to build it
-* how to include it
-* what every major function does
-* examples of usage
-* memory ownership rules
-* common patterns
-
-Here’s a solid professional-style README section you can paste and expand.
-
----
 
 # BasilsTools
 
@@ -388,4 +376,4 @@ target_link_libraries(MyGame
 )
 ```
 
-This is already approaching the structure of a legitimate open-source utility library.
+
