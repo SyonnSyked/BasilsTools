@@ -490,8 +490,24 @@ when finished using containers.
 
 ---
 
-# License
+---
 
-Currently unlicensed/private project.
+# Tile and Grid Tools
 
-Add an open-source license before public distribution.
+BasilsTools includes a lightweight tile/grid system built on top of `DynArray3D`.
+
+The system is made of two main types:
+
+- `BTile`
+- `BGrid`
+
+`BTile` represents one tile cell.
+`BGrid` represents a 3D tile grid using width, height, and layers.
+
+---
+
+## Including Tile and Grid
+
+```c
+#include "BTile.h"
+#include "BGrid.h"
