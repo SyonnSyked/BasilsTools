@@ -1,43 +1,30 @@
-# About
-
-A lightweight C utility library including:
-
-- Dynamic Array (generic)
-- 2D and 3D array wrappers
-- Memory-safe operations (insert, remove, resize, etc.)
-
 # BasilsTools
 
-A lightweight modular C utility library focused on reusable data structures and game-development foundations.
-
-Currently includes:
-
-* Dynamic 1D Arrays
-* Dynamic 2D Arrays
-* Dynamic 3D Arrays
-* Generic memory-safe resizing systems
-* Expandable utility architecture
+A lightweight modular C utility library focused on reusable data structures,
+memory-safe containers, and game-development foundations.
 
 Designed for:
 
-* Raylib projects
-* SDL projects
-* ASCII engines
-* Tile systems
-* Simulation grids
-* General-purpose C programming
+- Raylib projects
+- SDL projects
+- ASCII engines
+- Tile systems
+- Simulation grids
+- General-purpose C programming
 
 ---
 
-# Building
+# Features
 
-```powershell
-mkdir build
-cd build
+Current modules include:
 
-cmake ..
-cmake --build .
-```
+- Generic Dynamic Arrays
+- Dynamic 2D Arrays
+- Dynamic 3D Arrays
+- Automatic memory resizing
+- Contiguous cache-friendly layouts
+- Safe insert/remove operations
+- Copy and move semantics
 
 ---
 
@@ -46,161 +33,190 @@ cmake --build .
 ```txt
 BasilsTools/
 ├─ include/
+│  ├─ DynamicArray.h
+│  ├─ DynamicArray2D.h
+│  ├─ DynamicArray3D.h
+│  └─ Tile.h
+│
 ├─ src/
 ├─ tests/
-├─ build/
 ├─ CMakeLists.txt
 └─ README.md
 ```
 
 ---
 
-# Including BasilsTools
+# Building
 
-```c
-#include <BasilsTools/DynamicArray.h>
-#include <BasilsTools/DynamicArray2D.h>
-#include <BasilsTools/DynamicArray3D.h>
+## Configure
+
+```powershell
+cmake -S . -B build
+```
+
+## Build
+
+```powershell
+cmake --build build
 ```
 
 ---
 
-# DynamicArray (1D)
+# Linking Into Another Project
 
-## Purpose
+```cmake
+add_subdirectory(external/BasilsTools)
 
-Provides a resizable contiguous memory array similar to `std::vector` in C++.
+target_link_libraries(MyProject
+    PRIVATE
+        BasilsTools
+)
+```
+
+---
+
+# Including Headers
+
+```c
+#include "DynamicArray.h"
+#include "DynamicArray2D.h"
+#include "DynamicArray3D.h"
+```
+
+---
+
+# Dynamic Array (1D)
+
+Provides a generic resizable contiguous memory container similar to
+`std::vector` in C++.
 
 Supports:
 
-* automatic resizing
-* indexed access
-* push/pop operations
-* generic element storage
-* contiguous memory layout
+- Automatic resizing
+- Push/pop operations
+- Insert/remove operations
+- Indexed access
+- Generic element storage
+- Copy/move semantics
 
 ---
 
-# DynamicArray Structure
+# DynArray Structure
 
 ```c
-typedef struct DynamicArray
+typedef struct DynArray
 {
     void* data;
+
     size_t elementSize;
-    size_t size;
+
+    size_t count;
     size_t capacity;
-} DynamicArray;
+
+} DynArray;
 ```
 
 ---
 
-# Functions
+# DynArray Functions
 
 ---
 
-## DynArray_Create
+## Array_Init
 
-### Description
-
-Creates a new dynamic array.
+Initializes a dynamic array.
 
 ### Parameters
 
-| Parameter       | Description                  |
-| --------------- | ---------------------------- |
-| elementSize     | Size of one element in bytes |
-| initialCapacity | Starting capacity            |
+| Parameter     | Description |
+|---------------|-------------|
+| array         | Array to initialize |
+| elementSize   | Size of one element in bytes |
 
 ### Returns
 
-Initialized `DynamicArray`
+`true` on success.
 
 ### Example
 
 ```c
-DynamicArray numbers =
-    DynArray_Create(sizeof(int), 10);
+DynArray numbers;
+
+Array_Init(&numbers, sizeof(int));
 ```
 
 ---
 
-## DynArray_Destroy
+## Array_Destroy
 
-### Description
-
-Frees all memory owned by the array.
-
-### Parameters
-
-| Parameter | Description      |
-| --------- | ---------------- |
-| array     | Array to destroy |
+Destroys the array and frees all owned memory.
 
 ### Example
 
 ```c
-DynArray_Destroy(&numbers);
+Array_Destroy(&numbers);
 ```
 
 ---
 
-## DynArray_PushBack
+## Array_Clear
 
-### Description
+Clears all elements without freeing allocated capacity.
+
+### Example
+
+```c
+Array_Clear(&numbers);
+```
+
+---
+
+## Array_PushBack
 
 Appends an element to the end of the array.
 
 Automatically resizes when capacity is exceeded.
-
-### Parameters
-
-| Parameter | Description             |
-| --------- | ----------------------- |
-| array     | Target array            |
-| element   | Pointer to element data |
 
 ### Example
 
 ```c
 int value = 42;
 
-DynArray_PushBack(&numbers, &value);
+Array_PushBack(&numbers, &value);
 ```
 
 ---
 
-## DynArray_Get
+## Array_PopBack
 
-### Description
+Removes the last element.
 
-Returns a pointer to an element at the given index.
+### Example
 
-### Parameters
+```c
+int value;
 
-| Parameter | Description   |
-| --------- | ------------- |
-| array     | Target array  |
-| index     | Element index |
+Array_PopBack(&numbers, &value);
+```
 
-### Returns
+---
 
-Pointer to the element.
+## Array_Get
+
+Returns a pointer to an element at an index.
 
 ### Example
 
 ```c
 int* value =
-    (int*)DynArray_Get(&numbers, 0);
+    (int*)Array_Get(&numbers, 0);
 
 printf("%d\n", *value);
 ```
 
 ---
 
-## DynArray_Set
-
-### Description
+## Array_Set
 
 Copies data into an element slot.
 
@@ -209,56 +225,114 @@ Copies data into an element slot.
 ```c
 int value = 99;
 
-DynArray_Set(&numbers, 0, &value);
+Array_Set(&numbers, 0, &value);
 ```
 
 ---
 
-## DynArray_Resize
+## Array_Insert
 
-### Description
-
-Resizes the internal storage capacity.
-
-Typically handled automatically.
+Inserts an element at an index.
 
 ### Example
 
 ```c
-DynArray_Resize(&numbers, 128);
+int value = 123;
+
+Array_Insert(&numbers, 1, &value);
+```
+
+---
+
+## Array_RemoveAt
+
+Removes an element while preserving order.
+
+### Example
+
+```c
+Array_RemoveAt(&numbers, 2);
+```
+
+---
+
+## Array_RemoveAtSwap
+
+Removes an element by swapping with the last element.
+
+Faster than `Array_RemoveAt`, but does not preserve order.
+
+### Example
+
+```c
+Array_RemoveAtSwap(&numbers, 2);
+```
+
+---
+
+## Array_Reserve
+
+Reserves memory capacity.
+
+### Example
+
+```c
+Array_Reserve(&numbers, 128);
+```
+
+---
+
+## Array_Resize
+
+Changes the element count of the array.
+
+### Example
+
+```c
+Array_Resize(&numbers, 64);
+```
+
+---
+
+## Array_ShrinkToFit
+
+Shrinks allocated memory to exactly fit the current element count.
+
+### Example
+
+```c
+Array_ShrinkToFit(&numbers);
 ```
 
 ---
 
 # DynamicArray2D
 
-## Purpose
-
-Provides a dynamic 2D grid.
+Provides a contiguous dynamic 2D memory grid.
 
 Useful for:
 
-* tilemaps
-* ASCII engines
-* cellular automata
-* pathfinding
-* game boards
+- Tilemaps
+- ASCII engines
+- Cellular automata
+- Pathfinding
+- Game boards
 
 ---
 
-# DynamicArray2D Structure
+# DynArray2D Structure
 
 ```c
-typedef struct DynamicArray2D
+typedef struct DynArray2D
 {
-    void* data;
-
-    size_t elementSize;
+    DynArray buffer;
 
     size_t width;
     size_t height;
 
-} DynamicArray2D;
+    size_t elementSize;
+
+} DynArray2D;
 ```
 
 ---
@@ -266,50 +340,110 @@ typedef struct DynamicArray2D
 # Example Usage
 
 ```c
-DynamicArray2D grid =
-    DynArray2D_Create(sizeof(int), 10, 10);
+DynArray2D grid;
+
+Array2D_Init(&grid, 10, 10, sizeof(int));
 
 int value = 7;
 
-DynArray2D_Set(&grid, 2, 3, &value);
+Array2D_Set(&grid, 2, 3, &value);
 
 int* result =
-    (int*)DynArray2D_Get(&grid, 2, 3);
+    (int*)Array2D_Get(&grid, 2, 3);
 
 printf("%d\n", *result);
+
+Array2D_Destroy(&grid);
 ```
+
+---
+
+# DynamicArray2D Functions
+
+- Array2D_Init
+- Array2D_Destroy
+- Array2D_Clear
+- Array2D_Resize
+- Array2D_Fill
+- Array2D_Set
+- Array2D_Get
+- Array2D_IsInBounds
+- Array2D_GetIndex
+- Array2D_GetPosition
+- Array2D_Count
+- Array2D_Copy
+- Array2D_Move
 
 ---
 
 # DynamicArray3D
 
-## Purpose
-
-Provides a dynamic 3D memory grid.
+Provides a contiguous dynamic 3D memory grid.
 
 Useful for:
 
-* voxel systems
-* chunk systems
-* layered tilemaps
-* simulation spaces
-* ECS spatial partitions
+- Voxel systems
+- Chunk systems
+- Layered tilemaps
+- Simulation spaces
+- Spatial partitioning
+
+---
+
+# DynArray3D Structure
+
+```c
+typedef struct DynArray3D
+{
+    DynArray buffer;
+
+    size_t width;
+    size_t height;
+    size_t depth;
+
+    size_t elementSize;
+
+} DynArray3D;
+```
 
 ---
 
 # Example Usage
 
 ```c
-DynamicArray3D world =
-    DynArray3D_Create(sizeof(int), 16, 16, 16);
+DynArray3D world;
+
+Array3D_Init(&world, 16, 16, 16, sizeof(int));
 
 int tile = 1;
 
-DynArray3D_Set(&world, 4, 2, 8, &tile);
+Array3D_Set(&world, 4, 2, 8, &tile);
 
 int* result =
-    (int*)DynArray3D_Get(&world, 4, 2, 8);
+    (int*)Array3D_Get(&world, 4, 2, 8);
+
+printf("%d\n", *result);
+
+Array3D_Destroy(&world);
 ```
+
+---
+
+# DynamicArray3D Functions
+
+- Array3D_Init
+- Array3D_Destroy
+- Array3D_Clear
+- Array3D_Resize
+- Array3D_Fill
+- Array3D_Set
+- Array3D_Get
+- Array3D_IsInBounds
+- Array3D_GetIndex
+- Array3D_GetPosition
+- Array3D_Count
+- Array3D_Copy
+- Array3D_Move
 
 ---
 
@@ -320,9 +454,9 @@ BasilsTools owns all internally allocated memory.
 You must call:
 
 ```c
-DynArray_Destroy()
-DynArray2D_Destroy()
-DynArray3D_Destroy()
+Array_Destroy()
+Array2D_Destroy()
+Array3D_Destroy()
 ```
 
 when finished using containers.
@@ -331,40 +465,33 @@ when finished using containers.
 
 # Design Goals
 
-* pure C
-* reusable
-* game-dev focused
-* cache-friendly layouts
-* expandable architecture
-* minimal dependencies
-* easy integration into engines
+- Pure C
+- Reusable
+- Game-dev focused
+- Cache-friendly memory layouts
+- Expandable architecture
+- Minimal dependencies
+- Easy engine integration
 
 ---
 
 # Future Plans
 
-* Generic Tile system
-* Hash maps
-* Arena allocators
-* String utilities
-* ECS containers
-* Spatial partitioning
-* Serialization systems
-* Math utilities
-* Grid projection helpers
-* Raylib integration examples
+- Generic tile system
+- Hash maps
+- Arena allocators
+- String utilities
+- ECS containers
+- Serialization systems
+- Math utilities
+- Grid projection helpers
+- Raylib examples
+- SDL examples
 
 ---
 
-# Example Linking in Another Project
+# License
 
-```cmake
-add_subdirectory(external/BasilsTools)
+Currently unlicensed/private project.
 
-target_link_libraries(MyGame
-    PRIVATE
-        BasilsTools
-)
-```
-
-
+Add an open-source license before public distribution.
