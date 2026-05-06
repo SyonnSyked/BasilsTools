@@ -13,10 +13,3 @@ cmake -S . -B build
 cmake --build build
 
 
-
-Then:
-
-```powershell
-git add README.md
-git commit -m "Add README"
-git push
