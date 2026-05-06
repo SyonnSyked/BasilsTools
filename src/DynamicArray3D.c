@@ -322,3 +322,18 @@ size_t Array3D_Count(const DynArray3D* array)
 
     return array->buffer.count;
 }
+
+void Array3D_Destroy(DynArray3D* array) {
+    if (array == NULL)
+    {
+        return;
+    }
+
+    free(array->buffer.data);
+
+    array->buffer.data = NULL;
+    array->elementSize = 0;
+    array->width = 0;
+    array->height = 0;
+    array->depth = 0;
+}

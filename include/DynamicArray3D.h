@@ -1,6 +1,7 @@
 #ifndef DYNAMIC_ARRAY_3D_H
 #define DYNAMIC_ARRAY_3D_H
 
+#include <stdlib.h>
 #include <stddef.h>
 #include <stdbool.h>
 
@@ -35,5 +36,7 @@ bool Array3D_GetIndex(const DynArray3D* array, size_t x, size_t y, size_t z, siz
 bool Array3D_GetPosition(const DynArray3D* array, size_t index, size_t* outX, size_t* outY, size_t* outZ);
 
 size_t Array3D_Count(const DynArray3D* array);
+
+void Array3D_Destroy(DynArray3D* array);
 
 #endif

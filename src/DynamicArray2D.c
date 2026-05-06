@@ -261,3 +261,17 @@ size_t Array2D_Count(const DynArray2D* array)
 
     return array->buffer.count;
 }
+
+void Array2D_Destroy(DynArray2D* array) {
+     if (array == NULL)
+    {
+        return;
+    }
+
+    free(array->buffer.data);
+
+    array->buffer.data = NULL;
+    array->elementSize = 0;
+    array->width = 0;
+    array->height = 0;
+}
