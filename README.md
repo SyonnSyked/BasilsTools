@@ -6,15 +6,6 @@ A lightweight C utility library including:
 - 2D and 3D array wrappers
 - Memory-safe operations (insert, remove, resize, etc.)
 
-## Build
-
-```bash
-cmake -S . -B build
-cmake --build build
-
-
-
-
 # BasilsTools
 
 A lightweight modular C utility library focused on reusable data structures and game-development foundations.
